@@ -1,0 +1,42 @@
+<div class="navbar">
+    <div class="brand">♻️ Smart Waste</div>
+    <div>
+        <a href="dashboard.php">Dashboard</a>
+        <a href="request.php">New Request</a>
+        <a href="report.php">Report Issue</a>
+        <a href="schedule.php" class="active">Schedules</a>
+        <a href="../logout.php">Logout</a>
+    </div>
+</div>
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            <h2>Upcoming Collection Schedules <?= $myZone ? "for " . htmlspecialchars($myZone) : "" ?></h2>
+            <div class="card-actions">
+                <span class="badge badge-all"><?= $schedules->num_rows ?> schedules</span>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Zone</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php while ($row = $schedules->fetch_assoc()): ?>
+                    <tr>
+                        <td><?= htmlspecialchars($row['zone']) ?></td>
+                        <td><?= date('M d, Y', strtotime($row['scheduled_date'])) ?></td>
+                        <td><?= $row['scheduled_time'] ?: '-' ?></td>
+                        <td><span class="badge badge-<?= $row['status'] ?>"><?= ucfirst($row['status']) ?></span></td>
+                    </tr>
+                    <?php endwhile; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

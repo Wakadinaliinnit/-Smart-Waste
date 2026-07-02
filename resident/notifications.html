@@ -1,0 +1,21 @@
+<div class="navbar">
+    <div class="brand">♻️ Smart Waste</div>
+    <div>
+        <a href="dashboard.php">Dashboard</a>
+        <a href="request.php">New Request</a>
+        <a href="report.php">Report Issue</a>
+        <a href="schedule.php">Schedules</a>
+        <a href="notifications.php" class="active">Notifications</a>
+        <a href="../logout.php">Logout</a>
+    </div>
+</div>
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            <h2>Notifications</h2>
+            <div class="card-actions">
+                <span class="badge badge-all"><?= $notifications->num_rows ?> notifications</span>
+            </div>
+       </div>
+
+       

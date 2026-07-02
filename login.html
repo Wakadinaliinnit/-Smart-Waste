@@ -1,0 +1,19 @@
+<div class="auth-box">
+    <h2>🔐 Login</h2>
+    <?php if ($error): ?><div class="alert alert-error"><?= $error ?></div><?php endif; ?>
+    <form method="POST">
+        <label>Email Address</label>
+        <input type="email" name="email" required placeholder="your@email.com">
+        
+        <label>Password</label>
+        <input type="password" name="password" required placeholder="Enter your password">
+        
+        <button type="submit" class="btn-block">Login</button>
+    </form>
+    <p style="text-align:center; margin-top:16px; font-size:14px;">
+        Don't have an account? <a href="register.php">Register as Resident</a>
+    </p>
+    <p style="text-align:center; margin-top:8px; font-size:13px; color:#6b7a70;">
+        Demo: admin@smartwaste.com / Admin@123
+    </p>
+</div>
