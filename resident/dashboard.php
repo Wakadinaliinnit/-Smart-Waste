@@ -1,10 +1,4 @@
 <?php
-// Show login message
-if (isset($_SESSION['login_message'])) {
-    echo '<div class="login-banner">👋 ' . $_SESSION['login_message'] . ' <span class="role-badge role-resident">Resident</span></div>';
-    unset($_SESSION['login_message']);
-}
-
 require_once '../includes/db.php';
 require_once '../includes/auth.php';
 requireRole('resident');
@@ -38,6 +32,16 @@ $requests = $conn->query("SELECT * FROM collection_requests WHERE resident_id=$u
         </div>
     </div>
     <div class="container">
+        <?php displayFlashMessages(); ?>
+
+        <?php if (isset($_SESSION['login_message'])): ?>
+            <div class="login-banner">
+                👋 <?= htmlspecialchars($_SESSION['login_message']) ?>
+                <span class="role-badge role-resident">Resident</span>
+            </div>
+            <?php unset($_SESSION['login_message']); ?>
+        <?php endif; ?>
+
         <h2>Welcome, <?= htmlspecialchars($_SESSION['full_name']) ?></h2>
         <div class="dashboard-grid">
             <div class="stat-card"><div class="num"><?= $reqCount ?></div><div class="label">Collection Requests</div></div>

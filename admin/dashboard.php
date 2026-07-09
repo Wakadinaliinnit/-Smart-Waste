@@ -199,7 +199,7 @@ $recentActivity = $conn->query("
                 <span class="role-badge role-admin">Admin</span>
             </div>
             <div>
-                <span class="details">📧 <?= htmlspecialchars($_SESSION['email'] ?? 'admin@smartwaste.com') ?></span>
+                <span class="details">Administrator account</span>
                 <span class="time" style="margin-left:15px;">🕐 Logged in: <?= date('h:i A') ?></span>
             </div>
         </div>

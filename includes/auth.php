@@ -24,12 +24,34 @@ function requireLogin() {
     }
 }
 
+function redirectToRoleDashboard($role = null) {
+    $role = $role ?? ($_SESSION['role'] ?? null);
+    switch ($role) {
+        case 'resident':
+            header("Location: ../resident/dashboard.php");
+            break;
+        case 'collector':
+            header("Location: ../collector/dashboard.php");
+            break;
+        case 'admin':
+            header("Location: ../admin/dashboard.php");
+            break;
+        case 'officer':
+            header("Location: ../officer/dashboard.php");
+            break;
+        default:
+            header("Location: ../login.php");
+            break;
+    }
+    exit();
+}
+
 function requireRole($role) {
     requireLogin();
     if ($_SESSION['role'] !== $role) {
-        $_SESSION['flash'] = ['type' => 'error', 'message' => "Access denied. This area is for $role only."];
-        header("Location: ../login.php");
-        exit();
+        http_response_code(403);
+        $_SESSION['flash'] = ['type' => 'error', 'message' => "Unauthorized access. You are not allowed to open that page."];
+        redirectToRoleDashboard($_SESSION['role']);
     }
 }
 

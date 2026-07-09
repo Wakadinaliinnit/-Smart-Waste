@@ -106,9 +106,9 @@ CREATE TABLE activity_logs (
 );
 
 -- ------------------------------------------------------------
--- SEED: Default admin account (password: Admin@123)
+-- SEED: Initial admin account
 -- ------------------------------------------------------------
 INSERT INTO users (full_name, email, phone, password_hash, role, status)
-VALUES ('System Admin', 'admin@smartwaste.com', '0700000000',
+VALUES ('System Admin', 'admin@localhost', '0700000000',
 '$2y$10$qr7b7S6I0ggwL0v206gM8e0U3t3f1dC1.ThMGPkjw5DgVCeZwCwD.', 'admin', 'active');
--- NOTE: this hash corresponds to password "Admin@123" using PHP password_hash(). Change after first login.
+-- NOTE: Change seeded account credentials immediately after first login.

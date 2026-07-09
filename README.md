@@ -21,12 +21,9 @@ project proposal (OOAD + Agile Scrum methodology).
    This creates the `smart_waste_db` database and a default admin account.
 5. Visit `http://localhost/smart-waste/` in your browser.
 
-## Default Admin Login
-- Email: `admin@smartwaste.com`
-- Password: `Admin@123`
-
-**Change this password after first login** — use the admin panel to create a new admin
-account, then delete/deactivate the default one, or add a "change password" feature.
+## Admin Account Note
+A seeded admin account is created during database import for initial setup and testing.
+Set your own secure credentials immediately after first login.
 
 ## Folder Structure
 ```

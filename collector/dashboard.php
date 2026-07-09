@@ -31,12 +31,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_report'])) {
     exit();
 }
 
-// Show login message
-if (isset($_SESSION['login_message'])) {
-    echo '<div class="login-banner">👋 ' . $_SESSION['login_message'] . ' <span class="role-badge role-collector">Collector</span></div>';
-    unset($_SESSION['login_message']);
-}
-
 $requests = $conn->query("SELECT * FROM collection_requests WHERE assigned_collector_id=$uid ORDER BY requested_at DESC");
 $reports = $conn->query("SELECT * FROM waste_reports WHERE assigned_collector_id=$uid ORDER BY reported_at DESC");
 ?>
@@ -58,6 +52,15 @@ $reports = $conn->query("SELECT * FROM waste_reports WHERE assigned_collector_id
     </div>
     <div class="container">
         <?php displayFlashMessages(); ?>
+
+        <?php if (isset($_SESSION['login_message'])): ?>
+            <div class="login-banner">
+                👋 <?= htmlspecialchars($_SESSION['login_message']) ?>
+                <span class="role-badge role-collector">Collector</span>
+            </div>
+            <?php unset($_SESSION['login_message']); ?>
+        <?php endif; ?>
+
         <h2>Welcome, <?= htmlspecialchars($_SESSION['full_name']) ?></h2>
 
         <div class="card">
