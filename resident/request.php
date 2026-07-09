@@ -5,17 +5,40 @@ requireRole('resident');
 
 $uid = $_SESSION['user_id'];
 
+function getZoneBasePrice($zone) {
+    $zoneKey = strtolower(trim((string)$zone));
+    $zonePrices = [
+        'zone a' => 300,
+        'zone b' => 350,
+        'juja' => 400,
+        'makongeni' => 450,
+        'lari' => 500,
+    ];
+    return $zonePrices[$zoneKey] ?? 300;
+}
+
+function getWasteMultiplier($wasteType) {
+    $multipliers = [
+        'general' => 1.00,
+        'recyclable' => 0.80,
+        'organic' => 0.90,
+        'hazardous' => 1.50,
+    ];
+    return $multipliers[$wasteType] ?? 1.00;
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $address = clean($conn, $_POST['address']);
     $zone = clean($conn, $_POST['zone']);
     $waste_type = clean($conn, $_POST['waste_type']);
     $notes = clean($conn, $_POST['notes']);
+    $estimated_price = round(getZoneBasePrice($zone) * getWasteMultiplier($waste_type), 2);
 
-    $stmt = $conn->prepare("INSERT INTO collection_requests (resident_id, address, zone, waste_type, notes) VALUES (?, ?, ?, ?, ?)");
-    $stmt->bind_param("issss", $uid, $address, $zone, $waste_type, $notes);
+    $stmt = $conn->prepare("INSERT INTO collection_requests (resident_id, address, zone, waste_type, notes, estimated_price) VALUES (?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("issssd", $uid, $address, $zone, $waste_type, $notes, $estimated_price);
     if ($stmt->execute()) {
         logActivity($conn, $uid, 'submit_request', "Requested collection at $address");
-        setFlash('success', 'Your waste collection request has been submitted.');
+        setFlash('success', 'Your waste collection request has been submitted. Estimated price: KES ' . number_format($estimated_price, 2));
         $stmt->close();
         header("Location: request.php");
         exit();
@@ -50,19 +73,57 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <label>Address *</label>
                 <input type="text" name="address" required>
                 <label>Zone</label>
-                <input type="text" name="zone" placeholder="e.g. Zone A">
+                <input type="text" name="zone" id="zone" placeholder="e.g. Zone A">
                 <label>Waste Type</label>
-                <select name="waste_type">
+                <select name="waste_type" id="waste_type">
                     <option value="general">General</option>
                     <option value="recyclable">Recyclable</option>
                     <option value="organic">Organic</option>
                     <option value="hazardous">Hazardous</option>
                 </select>
+                <label>Estimated Price</label>
+                <input type="text" id="estimated_price" value="KES 300.00" readonly>
                 <label>Additional Notes</label>
                 <textarea name="notes" rows="3"></textarea>
                 <button type="submit">Submit Request</button>
             </form>
         </div>
     </div>
+
+    <script>
+        (function () {
+            const zoneInput = document.getElementById('zone');
+            const wasteTypeInput = document.getElementById('waste_type');
+            const estimatedPriceInput = document.getElementById('estimated_price');
+
+            const zonePrices = {
+                'zone a': 300,
+                'zone b': 350,
+                'juja': 400,
+                'makongeni': 450,
+                'lari': 500
+            };
+
+            const multipliers = {
+                general: 1.0,
+                recyclable: 0.8,
+                organic: 0.9,
+                hazardous: 1.5
+            };
+
+            function updateEstimatedPrice() {
+                const zoneKey = (zoneInput.value || '').trim().toLowerCase();
+                const base = zonePrices[zoneKey] || 300;
+                const wasteType = wasteTypeInput.value || 'general';
+                const multiplier = multipliers[wasteType] || 1.0;
+                const total = (base * multiplier).toFixed(2);
+                estimatedPriceInput.value = 'KES ' + total;
+            }
+
+            zoneInput.addEventListener('input', updateEstimatedPrice);
+            wasteTypeInput.addEventListener('change', updateEstimatedPrice);
+            updateEstimatedPrice();
+        })();
+    </script>
 </body>
 </html>

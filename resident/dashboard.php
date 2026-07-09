@@ -53,12 +53,13 @@ $requests = $conn->query("SELECT * FROM collection_requests WHERE resident_id=$u
         <div class="card">
             <h3>My Recent Requests</h3>
             <table>
-                <tr><th>Date</th><th>Address</th><th>Waste Type</th><th>Status</th></tr>
+                <tr><th>Date</th><th>Address</th><th>Waste Type</th><th>Price (KES)</th><th>Status</th></tr>
                 <?php while ($row = $requests->fetch_assoc()): ?>
                 <tr>
                     <td><?= date('M d, Y', strtotime($row['requested_at'])) ?></td>
                     <td><?= htmlspecialchars($row['address']) ?></td>
                     <td><span class="badge badge-waste"><?= htmlspecialchars($row['waste_type']) ?></span></td>
+                    <td><?= number_format((float)($row['estimated_price'] ?? 0), 2) ?></td>
                     <td><span class="badge badge-<?= $row['status'] ?>"><?= ucfirst($row['status']) ?></span></td>
                 </tr>
                 <?php endwhile; ?>

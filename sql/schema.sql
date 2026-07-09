@@ -34,6 +34,7 @@ CREATE TABLE collection_requests (
     zone VARCHAR(100),
     waste_type VARCHAR(50) DEFAULT 'general',
     notes TEXT,
+    estimated_price DECIMAL(10,2) NOT NULL DEFAULT 0.00,
     status ENUM('pending', 'assigned', 'in_progress', 'completed', 'cancelled') DEFAULT 'pending',
     assigned_collector_id INT NULL,
     requested_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

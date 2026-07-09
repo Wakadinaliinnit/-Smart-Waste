@@ -61,13 +61,14 @@ $requests = $conn->query("SELECT cr.*, u.full_name AS resident_name FROM collect
         <div class="card">
             <h2>Collection Requests</h2>
             <table>
-                <tr><th>Date</th><th>Resident</th><th>Address</th><th>Waste Type</th><th>Status</th><th>Action</th></tr>
+                <tr><th>Date</th><th>Resident</th><th>Address</th><th>Waste Type</th><th>Price (KES)</th><th>Status</th><th>Action</th></tr>
                 <?php while ($row = $requests->fetch_assoc()): ?>
                 <tr>
                     <td><?= date('M d, Y', strtotime($row['requested_at'])) ?></td>
                     <td><?= htmlspecialchars($row['resident_name']) ?></td>
                     <td><?= htmlspecialchars($row['address']) ?></td>
                     <td><span class="badge badge-waste"><?= htmlspecialchars($row['waste_type']) ?></span></td>
+                    <td><?= number_format((float)($row['estimated_price'] ?? 0), 2) ?></td>
                     <td><span class="badge badge-<?= $row['status'] ?>"><?= ucfirst($row['status']) ?></span></td>
                     <td>
                         <?php if ($row['status'] === 'pending'): ?>
