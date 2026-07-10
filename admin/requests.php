@@ -67,7 +67,8 @@ $requests = $conn->query("SELECT cr.*, u.full_name AS resident_name FROM collect
                     <td><?= date('M d, Y', strtotime($row['requested_at'])) ?></td>
                     <td><?= htmlspecialchars($row['resident_name']) ?></td>
                     <td><?= htmlspecialchars($row['address']) ?></td>
-                    <td><span class="badge badge-waste"><?= htmlspecialchars($row['waste_type']) ?></span></td>
+                    <?php $wasteTypeLabel = trim((string)($row['waste_type'] ?? '')); ?>
+                    <td><span class="badge badge-waste"><?= htmlspecialchars($wasteTypeLabel !== '' ? ucfirst(str_replace('_', ' ', $wasteTypeLabel)) : 'General') ?></span></td>
                     <td><?= number_format((float)($row['estimated_price'] ?? 0), 2) ?></td>
                     <td><span class="badge badge-<?= $row['status'] ?>"><?= ucfirst($row['status']) ?></span></td>
                     <td>

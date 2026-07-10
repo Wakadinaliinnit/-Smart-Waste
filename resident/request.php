@@ -30,7 +30,11 @@ function getWasteMultiplier($wasteType) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $address = clean($conn, $_POST['address']);
     $zone = clean($conn, $_POST['zone']);
-    $waste_type = clean($conn, $_POST['waste_type']);
+    $waste_type = strtolower(trim((string)($_POST['waste_type'] ?? 'general')));
+    $allowedWasteTypes = ['general', 'recyclable', 'organic', 'hazardous'];
+    if (!in_array($waste_type, $allowedWasteTypes, true)) {
+        $waste_type = 'general';
+    }
     $notes = clean($conn, $_POST['notes']);
     $estimated_price = round(getZoneBasePrice($zone) * getWasteMultiplier($waste_type), 2);
 
